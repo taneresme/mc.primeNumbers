@@ -4,4 +4,4 @@ This repo cantains openMP and Thrust implementations for finding prime numbers. 
 
 When compiling openMP versions, do not forget providing `-fopenmp` flag to compiler.
 
-Sample thrust compiling command will look like C:\THRUST>nvcc -O2 -o prime_numbers prime_numbers.cu -DTHRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA
+Sample thrust compiling command will look like `C:\THRUST>nvcc -O2 -o prime_numbers prime_numbers.cu -DTHRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA`
