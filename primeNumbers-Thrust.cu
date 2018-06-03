@@ -5,8 +5,8 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/execution_policy.h>
 #include <iostream>
-#include <omp.h>
 #include <fstream>
+#include <time.h>
  
 struct prime_functor : public thrust::binary_function<int,int,int>
 {
@@ -67,19 +67,27 @@ double findPrimes(int N, int flag){
 	int _sqrt = (int)sqrt(N);
 	int i;
 	
-	double start = omp_get_wtime();
+    clock_t start = clock();
+	//double start = omp_get_wtime();
 		
 	//SERIAL SECTION
 	std::vector<int> primes;
 	primes.push_back(2);
 	for(i = 3; i <= _sqrt; i+=2){
-		for(int j : primes){
+		for (int j = 0; j < primes.size(); j++){
+			if( i % primes[j] == 0 ) break;
+			if( i / primes[j] < primes[j] ){ 
+				primes.push_back(i); 
+				break; 
+			}
+		}
+	/*	for(int j : primes){
 			if( i % j == 0 ) break;
 			if( i / j < j ){ 
 				primes.push_back(i); 
 				break; 
 			}
-		}
+		}*/
 	}
 	_sqrt = primes.size(); 
 		
@@ -88,8 +96,10 @@ double findPrimes(int N, int flag){
 	thrust::copy(primes.begin(), primes.end(), h_primes.begin());
 	if (flag == 1) hRun(i, N, _sqrt, primes, h_primes);
 	else dRun(i, N, _sqrt, primes, h_primes);
+	cudaThreadSynchronize(); // block until kernel is finished
 	
-	double duration = omp_get_wtime() - start;
+    double duration = ((double) (clock() - start)) / CLOCKS_PER_SEC;
+	//double duration = omp_get_wtime() - start;
 	
 	//thrust::copy_if(vPrimes.begin(), vPrimes.end(), std::ostream_iterator<int>(std::cout, "\n"), greater_than_two());
 	
