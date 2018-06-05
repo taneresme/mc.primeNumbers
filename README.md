@@ -1,4 +1,4 @@
-### Multi-Core / searching for prime numbers with OpenMP
+### Multi-Core / searching for prime numbers with OpenMP and Thrust
 
 This repo cantains openMP and Thrust implementations for finding prime numbers. Dev-C++ can be used for compiling project. 
 
